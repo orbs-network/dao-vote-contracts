@@ -1,0 +1,50 @@
+;; int ADDR_SIZE() asm "256 PUSHINT";
+
+(int, int, int) load_data() inline {
+    slice ds = get_data().begin_parse();
+
+    int proposal_start_time = ds~load_uint(64);
+    int proposal_end_time = ds~load_uint(64);
+    int proposal_snapshot_block = ds~load_uint(64);
+	ds.end_parse();
+
+    return (proposal_start_time, proposal_end_time, proposal_snapshot_block);
+}
+
+() recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) {
+    var (proposal_start_time, proposal_end_time, proposal_snapshot_block) = load_data();
+    throw_unless(0x1000, now() > proposal_start_time);
+    throw_unless(0x1001, now() < proposal_end_time);
+
+    return ();
+}
+
+(int) proposal_start_time() method_id {
+    var (proposal_start_time, proposal_end_time, proposal_snapshot_block) = load_data();
+    return proposal_start_time;
+}
+(int) proposal_end_time() method_id {
+    var (proposal_start_time, proposal_end_time, proposal_snapshot_block) = load_data();
+    return proposal_end_time;
+}
+
+(int) proposal_snapshot_block() method_id {
+    var (proposal_start_time, proposal_end_time, proposal_snapshot_block) = load_data();
+    return proposal_snapshot_block;
+}
+
+;; (tuple) get_inactive_wallets() method_id {
+;;     var (proposal_start_time, proposal_end_time, proposal_snapshot_block, inactive_wallets) = load_data();
+;;
+;;     var list = null();
+;;     int address = -1;
+;;
+;;     do {
+;;         (address, slice cs, int found) = inactive_wallets.udict_get_next?(ADDR_SIZE(), address);
+;;         if (found) {
+;;             list = cons(address, list);
+;;         }
+;;     } until (~ found);
+;;
+;;     return list;
+;; }

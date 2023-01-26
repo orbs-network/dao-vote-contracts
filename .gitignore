@@ -1,0 +1,5 @@
+.env
+.idea/
+build/deploy.config.json
+node_modules
+*.iml
