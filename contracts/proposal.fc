@@ -1,5 +1,3 @@
-;; int ADDR_SIZE() asm "256 PUSHINT";
-
 (int, int, int) load_data() inline {
     slice ds = get_data().begin_parse();
 
@@ -32,19 +30,3 @@
     var (proposal_start_time, proposal_end_time, proposal_snapshot_block) = load_data();
     return proposal_snapshot_block;
 }
-
-;; (tuple) get_inactive_wallets() method_id {
-;;     var (proposal_start_time, proposal_end_time, proposal_snapshot_block, inactive_wallets) = load_data();
-;;
-;;     var list = null();
-;;     int address = -1;
-;;
-;;     do {
-;;         (address, slice cs, int found) = inactive_wallets.udict_get_next?(ADDR_SIZE(), address);
-;;         if (found) {
-;;             list = cons(address, list);
-;;         }
-;;     } until (~ found);
-;;
-;;     return list;
-;; }
